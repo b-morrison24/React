@@ -26,12 +26,12 @@ const userResolvers = {
 
             // Validate password
             if (!validatePassword(password)) {
-                throw new Error('Password invalid'); 
+                throw new Error('Password invalid');
             }
 
             // Validate email
             if (!validateEmail(email)) {
-                throw new Error('Email invalid'); 
+                throw new Error('Email invalid');
             }
 
             // Hash password
