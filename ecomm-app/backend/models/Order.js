@@ -7,6 +7,7 @@ const orderSchema = new Schema({
         ref: 'User',
         required: true,
     },
+
     // CartItem model included here
     items: [ 
         {
@@ -15,6 +16,7 @@ const orderSchema = new Schema({
                 ref: 'Product',
                 required: true,
             },
+
             quantity: {
                 type: Number,
                 required: true,
@@ -22,11 +24,13 @@ const orderSchema = new Schema({
             }
         }
     ],
+
     total: {
         type: Number,
         required: true,
         default: 0,
     },
+
     status: {
         type: String,
         required: true,

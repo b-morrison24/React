@@ -6,13 +6,16 @@ const orderResolvers = {
         order: async (_, { id }) => {
             return await Order.findById(id);
         },
+
         userOrders: async (_, { userId }) => {
             return await Order.find({ userId });
         },
     },
+
     Mutation: {
-        addToCart: async (_, { userId, cartItem: { productId, quantity } }) => {
+        addToCart: async (_, { userId, cartItemInput: { productId, quantity } }) => {
             const product = await Product.findById(productId);
+
             if (!product) {
                 throw new Error('Product not found');
             }
@@ -33,10 +36,13 @@ const orderResolvers = {
             }
 
             order.total += product.price * quantity;
+
             return await order.save();
         },
+
         removeFromCart: async (_, { userId, productId }) => {
             const order = await Order.findOne({ userId, status: 'PENDING' });
+
             if (!order) {
                 throw new Error('No pending order found');
             }
@@ -51,13 +57,17 @@ const orderResolvers = {
 
             return await order.save();
         },
+
         placeOrder: async (_, { userId }) => {
             const order = await Order.findOne({ userId, status: 'PENDING' });
+
             if (!order) {
                 throw new Error('No pending order found');
             }
+            // TODO: integrate Stripe API
 
             order.status = 'COMPLETED';
+
             return await order.save();
         },
     },

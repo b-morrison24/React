@@ -1,62 +1,72 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { AuthenticationError } = require('apollo-server-express');
+const { generateToken } = require('../utils/auth');
+const { hashPassword, comparePassword } = require('../utils/hashPassword');
+const { validateEmail, validatePassword } = require('../utils/validateInput');
 
 const userResolvers = {
     Query: {
         user: async (_, { id }) => {
             return await User.findById(id);
         },
+
         users: async () => {
             return await User.find();
         },
     },
+
     Mutation: {
         registerUser: async (_, { registerInput: { name, email, password } }) => {
             // Check if user exists
             const existingUser = await User.findOne({ email });
+
             if (existingUser) {
                 throw new Error('User already exists');
             }
+
+            // Validate password
+            if (!validatePassword(password)) {
+                throw new Error('Password invalid'); 
+            }
+
+            // Validate email
+            if (!validateEmail(email)) {
+                throw new Error('Email invalid'); 
+            }
+
             // Hash password
-            const hashedPassword = await bcrypt.hash(password, 12);
-            
+            const hashedPassword = await hashPassword(password);
+
             // Create new user
             const newUser = new User({
                 name,
                 email,
                 password: hashedPassword,
             });
-            
-            const res = await newUser.save();
+
+            const savedUser = await newUser.save();
 
             // Generate JWT token
-            const token = jwt.sign(
-                { userId: res.id, email: res.email },
-                process.env.JWT_SECRET,
-                { expiresIn: '1h' }
-            );
-        
-            return { ...res._doc, id: res.id, token };
+            const token = generateToken(savedUser);
+
+            return { ...savedUser._doc, id: savedUser.id, token };
         },
+
         loginUser: async (_, { loginInput: { email, password } }) => {
             const user = await User.findOne({ email });
+
             if (!user) {
                 throw new AuthenticationError('Invalid credentials');
             }
-        
-            const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            const isPasswordValid = await comparePassword(password, user.password);
+
             if (!isPasswordValid) {
                 throw new AuthenticationError('Invalid credentials');
             }
-        
-            const token = jwt.sign(
-                { userId: user.id, email: user.email },
-                process.env.JWT_SECRET,
-                { expiresIn: '1h' }
-            );
-            
+
+            const token = generateToken(user);
+
             return { ...user._doc, id: user.id, token };
         },
     },

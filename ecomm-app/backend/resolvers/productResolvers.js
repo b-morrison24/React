@@ -5,10 +5,12 @@ const productResolvers = {
         product: async (_, { id }) => {
             return await Product.findById(id);
         },
+
         products: async () => {
             return await Product.find();
         },
     },
+
     Mutation: {
         addProduct: async (_, { productInput: { name, description, price, inStock } }) => {
             const newProduct = new Product({
@@ -20,14 +22,17 @@ const productResolvers = {
 
             return await newProduct.save();
         },
+
         updateProduct: async (_, { id, productInput }) => {
             return await Product.findByIdAndUpdate(id, productInput, { new: true });
         },
+
         deleteProduct: async (_, { id }) => {
             await Product.findByIdAndDelete(id);
+
             return true;
         },
     },
 };
 
-    module.exports = productResolvers;
+module.exports = productResolvers;

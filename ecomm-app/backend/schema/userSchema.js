@@ -31,4 +31,4 @@ const userTypeDefs = gql`
     }
 `;
 
-module.exports = userTypeDefs
+module.exports = userTypeDefs;

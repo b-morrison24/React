@@ -25,10 +25,10 @@ const orderTypeDefs = gql`
     }
 
     type Mutation {
-        addToCart(userId: ID!, cartItem: CartItemInput): Order
+        addToCart(userId: ID!, cartItemInput: CartItemInput): Order
         removeFromCart(userId: ID!, productId: ID!): Order
         placeOrder(userId: ID!): Order
     }
 `;
 
-module.exports = orderTypeDefs
+module.exports = orderTypeDefs;

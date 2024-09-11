@@ -54,7 +54,6 @@ const seedDatabase = async () => {
         // Insert seed data for Users and Products
         const insertedUsers = await User.insertMany(users);
         const insertedProducts = await Product.insertMany(products);
-        
 
         // Create orders from the inserted users and products
         const johnDoe = insertedUsers.find(user => user.name === 'John Doe');

@@ -28,4 +28,4 @@ const productTypeDefs = gql`
     }
 `;
 
-module.exports = productTypeDefs
+module.exports = productTypeDefs;

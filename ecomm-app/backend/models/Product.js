@@ -7,25 +7,24 @@ const productSchema = new Schema({
         required: true,
         trim: true,
     },
+
     description: {
         type: String,
         required: true,
         trim: true,
     },
+
     price: {
         type: Number,
         required: true,
     },
+
     inStock: {
         type: Boolean,
         required: true,
         default: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-});
+}, { timestamps: true});
 
 // Export the Product model
 const Product = mongoose.model('Product', productSchema);
