@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react';
+//import { useContext } from 'react';
 
-const AuthContext = createContext();
+const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -24,4 +25,11 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-//export const useAuth = () => useContext(AuthContext);
+// export const useAuth = () => {
+//     const context = useContext(AuthContext);
+//     if (context === undefined) {
+//         throw new Error("useAuth must be wrapped in a AuthProvider");
+//     }
+
+//     return context;
+// }
