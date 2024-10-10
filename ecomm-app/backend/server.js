@@ -9,7 +9,7 @@ async function startServer() {
     await server.start()
     server.applyMiddleware({ app })
 
-    const PORT = process.env.PORT || 3000
+    const PORT = process.env.PORT || 3001
 
     app.listen({ port: PORT}, () => {
         console.log(`Server running on http://localhost:${PORT}${server.graphqlPath}`);

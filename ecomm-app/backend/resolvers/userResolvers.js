@@ -52,22 +52,22 @@ const userResolvers = {
             return { ...savedUser._doc, id: savedUser.id, token };
         },
 
-        loginUser: async (_, { loginInput: { email, password } }) => {
+        loginUser: async (_, { loginInput: { email, password } }) => {            
             const user = await User.findOne({ email });
 
             if (!user) {
-                throw new AuthenticationError('Invalid credentials');
+                throw new AuthenticationError(`User doesn't exist`);
             }
 
             const isPasswordValid = await comparePassword(password, user.password);
 
             if (!isPasswordValid) {
-                throw new AuthenticationError('Invalid credentials');
+                throw new AuthenticationError('Password invalid');
             }
 
             const token = generateToken(user);
 
-            return { ...user._doc, id: user.id, token };
+            return { email: user.email, id: user.id, token };
         },
     },
 };
